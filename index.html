@@ -430,6 +430,7 @@
 
   function render() {
     const filtered = all.filter(matchFilters);
+    filtered.sort((a,b)=> (a.tier || 999) - (b.tier || 999));
     els.count.textContent = filtered.length;
 
     if (filtered.length === 0) {
