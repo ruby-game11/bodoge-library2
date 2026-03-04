@@ -3,169 +3,260 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ほどげ部ライブラリ</title>
-<style>
-:root{
-  --pink:#ffd6e7;
-  --peach:#ffe9d6;
-  --mint:#d9f7f2;
-  --sky:#e3f0ff;
-  --yellow:#fff5c4;
-  --line:#ffd0e0;
-  --text:#444;
-}
+  <title>ボドゲ部ライブラリ</title>
 
-body{
-  margin:0;
-  font-family:"Hiragino Maru Gothic ProN","Rounded Mplus 1c","Noto Sans JP",sans-serif;
-  background: linear-gradient(180deg,#fff0f6,#f7fbff);
-  color:var(--text);
-}
+  <!-- ゆるかわ（ちいかわ“っぽい”雰囲気のUI：丸い・パステル・ふわふわ） -->
+  <style>
+    :root{
+      --pink:#ffd6e7;
+      --peach:#ffe9d6;
+      --mint:#d9f7f2;
+      --sky:#e3f0ff;
+      --yellow:#fff5c4;
+      --line:#ffd0e0;
+      --text:#444;
+      --muted:#6b7280;
+      --cardShadow: 0 10px 30px rgba(0,0,0,.06);
+    }
 
-header{
-  padding:30px 16px 10px;
-  text-align:center;
-}
+    body{
+      margin:0;
+      font-family:"Hiragino Maru Gothic ProN","Rounded Mplus 1c","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif;
+      background: linear-gradient(180deg,#fff0f6,#f7fbff);
+      color:var(--text);
+      overflow-x:hidden;
+    }
 
-h1{
-  font-size:32px;
-  margin:0;
-}
+    /* うっすらドット（ゆるさ） */
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255, 140, 180, .35) 0 2px, transparent 3px),
+        radial-gradient(circle at 20% 80%, rgba(120, 220, 210, .35) 0 2px, transparent 3px),
+        radial-gradient(circle at 80% 30%, rgba(140, 190, 255, .35) 0 2px, transparent 3px),
+        radial-gradient(circle at 85% 85%, rgba(255, 210, 120, .35) 0 2px, transparent 3px);
+      opacity:.7;
+    }
 
-h1:before{
-  content:"🎲 ";
-}
+    header{
+      padding:28px 16px 10px;
+      text-align:center;
+      max-width:1100px;
+      margin:0 auto;
+      position:relative;
+      z-index:1;
+    }
 
-.sub{
-  margin-top:6px;
-  font-size:14px;
-}
+    h1{
+      font-size:32px;
+      margin:0;
+      letter-spacing:.04em;
+    }
 
-.wrap{
-  max-width:1100px;
-  margin:auto;
-  padding:16px;
-}
+    .sub{
+      margin-top:8px;
+      font-size:14px;
+      color:var(--muted);
+    }
 
-.panel{
-  background:white;
-  border-radius:20px;
-  padding:16px;
-  border:3px solid var(--line);
-}
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:16px;
+      position:relative;
+      z-index:1;
+    }
 
-.controls{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr 1fr;
-  gap:10px;
-}
+    .panel{
+      background:white;
+      border-radius:22px;
+      padding:16px;
+      border:3px solid var(--line);
+      box-shadow: var(--cardShadow);
+    }
 
-@media (max-width:800px){
-  .controls{grid-template-columns:1fr 1fr;}
-}
+    .controls{
+      display:grid;
+      grid-template-columns: 1.4fr .8fr .8fr .8fr;
+      gap:10px;
+    }
+    @media (max-width:900px){
+      .controls{ grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width:520px){
+      .controls{ grid-template-columns: 1fr; }
+    }
 
-input,select{
-  border-radius:16px;
-  border:2px solid var(--line);
-  padding:10px;
-  background:#fff;
-}
+    label{
+      font-size:12px;
+      color:var(--muted);
+      display:block;
+      margin-bottom:6px;
+    }
 
-.meta{
-  margin-top:10px;
-  display:flex;
-  justify-content:space-between;
-}
+    input,select{
+      width:100%;
+      box-sizing:border-box;
+      border-radius:16px;
+      border:2px solid var(--line);
+      padding:10px 12px;
+      background:#fff;
+      outline:none;
+    }
+    input::placeholder{ color:#9aa0a6; }
 
-.btn{
-  border-radius:16px;
-  border:none;
-  background:var(--pink);
-  padding:8px 14px;
-  font-weight:bold;
-  cursor:pointer;
-}
+    .meta{
+      margin-top:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
 
-.grid{
-  margin-top:20px;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px;
-}
+    .btn{
+      border-radius:16px;
+      border:none;
+      background:var(--pink);
+      padding:9px 14px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow: 0 6px 0 rgba(255, 140, 180, .35);
+    }
+    .btn:hover{ filter:brightness(1.03); transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0px); box-shadow: 0 4px 0 rgba(255, 140, 180, .30); }
 
-@media (max-width:900px){
-  .grid{grid-template-columns:repeat(2,1fr);}
-}
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:14px;
+    }
+    @media (min-width:980px){
+      .grid{ grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width:600px){
+      .grid{ grid-template-columns: 1fr; }
+    }
 
-.card{
-  background:#fff;
-  border:3px solid #ffd6e7;
-  box-shadow:0 6px 0 #ffd6e7;
-}
+    /* ★ 画像左 / 文章右（全部右側） */
+    .card{
+      background:white;
+      border-radius:22px;
+      border:3px solid var(--line);
+      overflow:hidden;
+      box-shadow: var(--cardShadow);
+      display:grid;
+      grid-template-columns: 150px 1fr; /* 左：画像 / 右：文章 */
+      min-height:140px;
+      transition:.15s;
+    }
+    .card:hover{ transform: translateY(-2px); }
 
-.card:hover{
-  transform:translateY(-4px);
-}
+    /* 画像エリア（リンクにも対応） */
+    .thumb{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:140px;
+      height:100%;
+      background: linear-gradient(180deg,var(--sky),var(--mint));
+      color:#7b8794;
+      font-size:12px;
+      text-decoration:none;
+      overflow:hidden;
+    }
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
 
-.thumb{
-  height:100%;
-  min-height:140px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(180deg,var(--sky),var(--mint));
-}
+    /* 公式バッジ */
+    .thumb.is-link::after{
+      content:"公式へ";
+      position:absolute;
+      bottom:8px;
+      right:8px;
+      background:#ff8ab0;
+      color:#fff;
+      font-size:11px;
+      font-weight:800;
+      padding:3px 8px;
+      border-radius:999px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.10);
+    }
 
-.content{
-  padding:14px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
+    .thumb.is-link{ cursor:pointer; }
+    .thumb.is-link:hover img{ transform: scale(1.03); transition:.2s; }
 
-.title{
-  font-weight:bold;
-  margin-bottom:6px;
-}
+    .content{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+    }
 
-.row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
+    .title{
+      font-weight:900;
+      margin:0;
+      font-size:15px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .title:before{ content:"🎲"; }
 
-.pill{
-  background:var(--yellow);
-  border-radius:999px;
-  padding:3px 8px;
-  font-size:12px;
-}
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      font-size:12px;
+      color:#555;
+    }
 
-.note{
-  margin-top:6px;
-  font-size:12px;
-  background:var(--peach);
-  padding:6px;
-  border-radius:10px;
-}
+    .pill{
+      background:var(--yellow);
+      border-radius:999px;
+      padding:4px 9px;
+      font-size:12px;
+      border:1px solid rgba(0,0,0,.04);
+    }
 
-.footer{
-  text-align:center;
-  margin-top:20px;
-  font-size:12px;
-}
+    .note{
+      margin-top:2px;
+      font-size:12px;
+      background:var(--peach);
+      padding:8px 10px;
+      border-radius:14px;
+      line-height:1.35;
+    }
 
-  @media (max-width:600px){
-  .card{
-    grid-template-columns:1fr;
-  }
-}
-  
-</style>
+    /* スマホは縦に戻す（見やすい） */
+    @media (max-width:600px){
+      .card{ grid-template-columns: 1fr; }
+      .thumb{ min-height:120px; }
+    }
+
+    .footer{
+      text-align:center;
+      margin:18px 0 30px;
+      font-size:12px;
+      color:var(--muted);
+      position:relative;
+      z-index:1;
+    }
+  </style>
 </head>
+
 <body>
   <header>
-    <h1>ほどげ部ライブラリ</h1>
+    <h1>🎲 ボドゲ部ライブラリ 🧸</h1>
     <div class="sub">みんなの所持ボードゲームを検索・絞り込みできる共有ページ</div>
   </header>
 
@@ -176,6 +267,7 @@ input,select{
           <label>タイトル検索</label>
           <input id="q" placeholder="例：カタン / ドミニオン / テラフォ…" />
         </div>
+
         <div>
           <label>人数（含まれるゲーム）</label>
           <select id="players">
@@ -186,6 +278,7 @@ input,select{
             <option value="5">5人以上</option>
           </select>
         </div>
+
         <div>
           <label>プレイ時間（分）</label>
           <select id="time">
@@ -196,6 +289,7 @@ input,select{
             <option value="9999">90以上</option>
           </select>
         </div>
+
         <div>
           <label>所持者</label>
           <select id="owner">
@@ -214,13 +308,13 @@ input,select{
   </div>
 
   <div class="footer">
-    データ更新：Googleスプレッドシートに追加するだけ。画像URLは任意です。<br/>
-    作成：ほどげ部ライブラリ（GitHub Pages）
+    データ更新：Googleスプレッドシートに追加するだけ（公式URLは <b>officialUrl</b> 列に入れてね）
   </div>
 
 <script>
-  // ★ここを自分のCSV URLに差し替え
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrNGoGsxMqbG2ne7A9eSSCRBSKPfo_6llIEZ6pO1KTX3Le8rA6pgLwYl-cyVXbdaa-dlGIVEE2wSax/pub?gid=0&single=true&output=csv";
+  // ★あなたの公開CSV URL（設定済み）
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrNGoGsxMqbG2ne7A9eSSCRBSKPfo_6llIEZ6pO1KTX3Le8rA6pgLwYl-cyVXbdaa-dlGIVEE2wSax/pub?gid=0&single=true&output=csv";
+
   const els = {
     q: document.getElementById("q"),
     players: document.getElementById("players"),
@@ -233,13 +327,32 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrNGoGsxMqbG2n
 
   let all = [];
 
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function safeUrl(u){
+    const s = String(u ?? "").trim();
+    if (!s) return "";
+    // http/https のみ許可（安全のため）
+    if (/^https?:\/\/\S+/i.test(s)) return s;
+    return "";
+  }
+
   function parseCSV(text) {
-    // ざっくりCSV（Google gviz CSV想定：ダブルクォート対応）
+    // GoogleのCSV出力想定：ダブルクォート・改行・カンマ対応の簡易パーサ
     const rows = [];
     let row = [], cur = "", inQ = false;
-    for (let i=0; i<text.length; i++){
+
+    for (let i = 0; i < text.length; i++) {
       const c = text[i];
-      if (c === '"' ) {
+
+      if (c === '"') {
         if (inQ && text[i+1] === '"') { cur += '"'; i++; }
         else inQ = !inQ;
       } else if (c === ',' && !inQ) {
@@ -254,16 +367,23 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrNGoGsxMqbG2n
     }
     if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
 
-    const header = rows.shift().map(h => (h || "").trim());
+    const header = (rows.shift() || []).map(h => (h || "").trim());
+
     return rows
       .filter(r => r.some(v => (v || "").trim() !== ""))
       .map(r => {
         const o = {};
         header.forEach((h, idx) => o[h] = (r[idx] ?? "").trim());
+
         // 数値化
         o.minPlayers = Number(o.minPlayers || 0);
         o.maxPlayers = Number(o.maxPlayers || 0);
         o.playTime = Number(o.playTime || 0);
+
+        // URL正規化（安全）
+        o.imageUrl = safeUrl(o.imageUrl);
+        o.officialUrl = safeUrl(o.officialUrl);
+
         return o;
       });
   }
@@ -272,11 +392,9 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrNGoGsxMqbG2n
 
   function buildOwnerOptions() {
     const owners = uniq(all.map(x => x.owner)).sort((a,b)=>a.localeCompare(b,'ja'));
-    els.owner.innerHTML = `<option value="">全員</option>` + owners.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("");
-  }
-
-  function escapeHtml(s){
-    return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    els.owner.innerHTML =
+      `<option value="">全員</option>` +
+      owners.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("");
   }
 
   function matchFilters(item) {
@@ -311,25 +429,44 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrNGoGsxMqbG2n
 
   function render() {
     const filtered = all.filter(matchFilters);
-
     els.count.textContent = filtered.length;
+
+    if (filtered.length === 0) {
+      els.grid.innerHTML = `<div style="padding:18px;color:#6b7280;">該当するゲームがありませんでした 🥲</div>`;
+      return;
+    }
 
     els.grid.innerHTML = filtered.map(x => {
       const players = (x.minPlayers && x.maxPlayers)
         ? `${x.minPlayers}〜${x.maxPlayers}人`
         : `人数不明`;
+
       const time = x.playTime ? `${x.playTime}分` : `時間不明`;
       const genre = x.genre ? `<span class="pill">${escapeHtml(x.genre)}</span>` : "";
       const owner = x.owner ? `<span class="pill">所持：${escapeHtml(x.owner)}</span>` : `<span class="pill">所持：不明</span>`;
       const note = x.note ? `<div class="note">${escapeHtml(x.note)}</div>` : "";
 
-      const thumb = x.imageUrl
-        ? `<div class="thumb"><img src="${escapeHtml(x.imageUrl)}" alt="${escapeHtml(x.title)}"></div>`
-        : `<div class="thumb">画像なし</div>`;
+      // ★画像クリック → officialUrl（なければリンク無し）
+      let thumbHtml = "";
+      if (x.imageUrl) {
+        if (x.officialUrl) {
+          thumbHtml = `
+            <a class="thumb is-link" href="${escapeHtml(x.officialUrl)}" target="_blank" rel="noopener noreferrer">
+              <img src="${escapeHtml(x.imageUrl)}" alt="${escapeHtml(x.title || "")}">
+            </a>`;
+        } else {
+          thumbHtml = `
+            <div class="thumb">
+              <img src="${escapeHtml(x.imageUrl)}" alt="${escapeHtml(x.title || "")}">
+            </div>`;
+        }
+      } else {
+        thumbHtml = `<div class="thumb">画像なし</div>`;
+      }
 
       return `
         <div class="card">
-          ${thumb}
+          ${thumbHtml}
           <div class="content">
             <div class="title">${escapeHtml(x.title || "（タイトル未入力）")}</div>
             <div class="row">
@@ -346,16 +483,24 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrNGoGsxMqbG2n
   }
 
   async function init(){
-    if (CSV_URL.includes("PASTE_YOUR_CSV_URL_HERE")) {
-      els.grid.innerHTML = `<div style="color:#a1a1aa">CSV_URL を自分のスプレッドシートのCSVリンクに差し替えてください。</div>`;
-      return;
-    }
-    const res = await fetch(CSV_URL, { cache: "no-store" });
-    const text = await res.text();
-    all = parseCSV(text);
+    try{
+      const res = await fetch(CSV_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error(`CSV fetch failed: ${res.status}`);
+      const text = await res.text();
+      all = parseCSV(text);
 
-    buildOwnerOptions();
-    render();
+      buildOwnerOptions();
+      render();
+    }catch(e){
+      console.error(e);
+      els.grid.innerHTML = `
+        <div style="padding:18px;color:#6b7280;">
+          CSVの読み込みに失敗しました。<br>
+          ・スプレッドシートが「ウェブに公開」になっているか<br>
+          ・CSV_URLが正しいか<br>
+          を確認してください。
+        </div>`;
+    }
   }
 
   ["input","change"].forEach(ev => {
